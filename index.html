@@ -620,8 +620,9 @@
       }
       input.parentElement.style.display = 'none';
       success.style.display = 'block';
-      // In production connect this to your email service (Mailchimp, ConvertKit, etc.)
-      console.log('Early access signup:', val);
+      setTimeout(() => {
+        window.open('http://eepurl.com/f0m_7gaqlr', '_blank');
+      }, 1500);
     }
 
     document.getElementById('email').addEventListener('keydown', function(e) {
