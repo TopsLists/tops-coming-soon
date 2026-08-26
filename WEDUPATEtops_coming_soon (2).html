@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TOPS — Everyone's a Top Voice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0E0D0B; --bg2:#141210; --bg3:#1A1814;
+      --gold:#C9A84C; --gold-lt:#E8C86A; --gold-dk:#A8841E;
+      --text:#F0EDE8; --muted:#8A8478; --border:#2A2720; --radius:8px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:15px; line-height:1.6; min-height:100vh; }
+
+    /* HEADER */
+    header {
+      position:sticky; top:0; z-index:100;
+      background:rgba(14,13,11,0.96); backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border);
+      padding:0 24px; height:58px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .logo {
+      font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:3px;
+      background:linear-gradient(135deg,#F0D080 0%,#C9A84C 40%,#E8C86A 70%,#A8841E 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      text-decoration:none;
+    }
+    .header-right { display:flex; align-items:center; gap:14px; }
+    .social-link {
+      color:var(--gold); text-decoration:none; font-size:12px; font-weight:600;
+      letter-spacing:0.5px; opacity:0.85; transition:opacity 0.2s;
+    }
+    .social-link:hover { opacity:1; }
+    .social-divider { color:var(--border); font-size:14px; }
+    .badge {
+      background:var(--gold); color:var(--bg); font-size:10px; font-weight:700;
+      padding:3px 10px; border-radius:20px; letter-spacing:0.5px;
+    }
+
+    /* CATEGORY NAV */
+    .cat-nav { background:var(--bg2); border-bottom:1px solid var(--border); padding:0 24px; overflow-x:auto; scrollbar-width:none; }
+    .cat-nav::-webkit-scrollbar { display:none; }
+    .cat-nav-inner { display:flex; gap:6px; padding:10px 0; width:max-content; }
+    .cat-btn {
+      background:transparent; border:1px solid var(--border); border-radius:20px;
+      padding:5px 14px; color:var(--muted); font-size:12px; font-weight:500;
+      font-family:'Inter',sans-serif; cursor:pointer; white-space:nowrap; transition:all 0.2s;
+    }
+    .cat-btn:hover, .cat-btn.active { background:var(--gold); border-color:var(--gold); color:var(--bg); }
+
+    /* HERO */
+    .hero { padding:68px 24px 52px; text-align:center; max-width:680px; margin:0 auto; }
+    .hero-eyebrow { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+    .hero h1 {
+      font-family:'Bebas Neue',sans-serif; font-size:clamp(52px,10vw,90px);
+      letter-spacing:4px; line-height:0.93;
+      background:linear-gradient(160deg,#F0D080 0%,#C9A84C 50%,#A8841E 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      margin-bottom:20px;
+    }
+    .hero-sub { font-size:17px; color:var(--muted); font-weight:300; margin-bottom:32px; line-height:1.75; }
+    .hero-sub strong { color:var(--text); font-weight:600; }
+    .email-form { display:flex; gap:8px; max-width:440px; margin:0 auto 14px; }
+    .email-form input {
+      flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius);
+      padding:13px 16px; color:var(--text); font-size:14px; font-family:'Inter',sans-serif;
+      outline:none; transition:border-color 0.2s;
+    }
+    .email-form input:focus { border-color:var(--gold); }
+    .email-form input::placeholder { color:var(--muted); }
+    .btn-gold {
+      background:linear-gradient(135deg,#C9A84C,#A8841E); color:var(--bg); border:none;
+      border-radius:var(--radius); padding:13px 22px; font-size:13px; font-weight:700;
+      font-family:'Inter',sans-serif; letter-spacing:0.5px; cursor:pointer; white-space:nowrap; transition:opacity 0.2s;
+    }
+    .btn-gold:hover { opacity:0.85; }
+    .hero-note { font-size:12px; color:var(--muted); }
+
+    /* TICKER */
+    .ticker-wrap { overflow:hidden; background:var(--bg3); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:10px 0; margin-bottom:52px; }
+    .ticker-track { display:flex; gap:48px; width:max-content; animation:ticker 45s linear infinite; }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .ticker-item { font-size:12px; font-weight:500; color:var(--muted); letter-spacing:1px; white-space:nowrap; }
+    .ticker-item span { color:var(--gold); margin-right:6px; }
+
+    /* SECTION HEAD */
+    .section-head { text-align:center; padding:0 24px 36px; }
+    .section-head h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(32px,6vw,52px); letter-spacing:3px; color:var(--text); margin-bottom:8px; }
+    .section-head p { color:var(--muted); font-size:14px; }
+
+    /* CATEGORY LABEL */
+    .cat-section-label { max-width:1100px; margin:0 auto 14px; padding:0 24px; display:flex; align-items:center; gap:12px; }
+    .cat-section-label span { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); white-space:nowrap; }
+    .cat-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* GRID */
+    .lists-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:18px; max-width:1100px; margin:0 auto 44px; padding:0 24px; }
+
+    /* CARD */
+    .list-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; overflow:hidden; transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s; }
+    .list-card:hover { border-color:var(--gold-dk); transform:translateY(-2px); box-shadow:0 6px 28px rgba(201,168,76,0.07); }
+
+    .card-header { padding:16px 18px 12px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:10px; cursor:pointer; }
+    .card-category { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
+    .card-title { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:1.5px; color:var(--text); line-height:1.1; }
+    .trophy-icon { font-size:20px; flex-shrink:0; margin-top:2px; }
+
+    /* RANKED LIST */
+    .ranked-list { padding:2px 0; }
+
+    .ranked-item { display:flex; align-items:flex-start; gap:10px; padding:10px 18px; border-bottom:1px solid rgba(42,39,32,0.5); transition:background 0.15s; }
+    .ranked-item:last-child { border-bottom:none; }
+    .ranked-item:hover { background:rgba(201,168,76,0.04); }
+
+    .rank-badge { width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#C9A84C,#A8841E); color:var(--bg); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+
+    .item-content { flex:1; min-width:0; }
+    .item-name { font-weight:600; font-size:13px; color:var(--text); margin-bottom:2px; }
+
+    /* COMPACT DESC — shown by default */
+    .item-desc-compact { font-size:12px; color:var(--muted); line-height:1.4; }
+
+    /* FULL DESC — hidden by default, shown when card is expanded */
+    .item-desc-full { font-size:13px; color:var(--muted); line-height:1.6; margin-top:4px; display:none; }
+    .item-honest-note { font-size:12px; color:var(--gold); line-height:1.55; margin-top:6px; padding:8px 10px; background:rgba(201,168,76,0.08); border-left:2px solid var(--gold); border-radius:0 4px 4px 0; display:none; }
+
+    /* When card is expanded show full and hide compact */
+    .list-card.expanded .item-desc-compact { display:none; }
+    .list-card.expanded .item-desc-full { display:block; }
+    .list-card.expanded .item-honest-note { display:block; }
+
+    /* Items with NO full desc — keep compact visible when expanded so nothing looks empty */
+    .list-card.expanded .item-content:not(:has(.item-desc-full)) .item-desc-compact { display:block; }
+
+    /* Always show shop buttons regardless of expand state */
+    .shop-btn { display:inline-flex; }
+
+    /* Smooth expand transition */
+    .ranked-list { transition: all 0.2s ease; }
+
+    .shop-btn {
+      display:inline-flex; align-items:center; gap:4px; background:transparent;
+      border:1px solid var(--gold-dk); border-radius:4px; padding:3px 9px;
+      font-size:11px; font-weight:600; color:var(--gold); text-decoration:none;
+      letter-spacing:0.3px; margin-top:6px; transition:background 0.15s,color 0.15s; white-space:nowrap;
+    }
+    .shop-btn:hover { background:var(--gold); color:var(--bg); }
+    .shop-btn::after { content:'→'; }
+
+    /* EXPAND TOGGLE */
+    .card-toggle {
+      padding:8px 18px; border-top:1px solid var(--border); text-align:center;
+      cursor:pointer; font-size:11px; font-weight:600; color:var(--muted);
+      letter-spacing:0.5px; transition:color 0.2s, background 0.2s;
+      user-select:none;
+    }
+    .card-toggle:hover { color:var(--gold); background:rgba(201,168,76,0.04); }
+    .list-card.expanded .card-toggle { color:var(--gold); }
+
+    /* CARD FOOTER */
+    .card-footer { padding:10px 18px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .card-meta { display:flex; gap:12px; }
+    .meta-item { font-size:11px; color:var(--muted); display:flex; align-items:center; gap:3px; }
+    .view-full { font-size:11px; color:var(--gold); text-decoration:none; font-weight:500; opacity:0.7; transition:opacity 0.2s; }
+    .view-full:hover { opacity:1; }
+
+    /* HOW IT WORKS */
+    .divider { display:flex; align-items:center; gap:16px; max-width:1100px; margin:8px auto 36px; padding:0 24px; }
+    .divider-line { flex:1; height:1px; background:var(--border); }
+    .divider-label { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gold); }
+    .how-section { max-width:1100px; margin:0 auto 72px; padding:0 24px; }
+    .how-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:18px; }
+    .how-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:26px 22px; text-align:center; }
+    .how-num { font-family:'Bebas Neue',sans-serif; font-size:50px; letter-spacing:2px; background:linear-gradient(135deg,#C9A84C,#A8841E); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; margin-bottom:12px; }
+    .how-title { font-weight:600; font-size:14px; color:var(--text); margin-bottom:8px; }
+    .how-desc { font-size:13px; color:var(--muted); line-height:1.65; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:34px 24px; text-align:center; }
+    .footer-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; background:linear-gradient(135deg,#C9A84C,#A8841E); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:8px; }
+    footer p { font-size:13px; color:var(--muted); margin-bottom:4px; }
+    footer a { color:var(--gold); text-decoration:none; opacity:0.8; }
+    footer a:hover { opacity:1; }
+
+    @media(max-width:600px) {
+      .email-form { flex-direction:column; }
+      .hero { padding:44px 16px 36px; }
+      .lists-grid { grid-template-columns:1fr; padding:0 14px 36px; }
+      .header-right .badge { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">TOPS</a>
+  <div class="header-right">
+    <a class="social-link" href="https://x.com/TopsLists" target="_blank">𝕏 @TopsLists</a>
+    <span class="social-divider">·</span>
+    <a class="social-link" href="https://pin.it/6QCUAtBxT" target="_blank">📌 Pinterest</a>
+    <a href="#early-access" class="badge" style="text-decoration:none;">LAUNCHING SOON ↓</a>
+  </div>
+</header>
+
+<nav class="cat-nav">
+  <div class="cat-nav-inner">
+    <button class="cat-btn active" onclick="filterCat('all',this)">All Lists</button>
+    <button class="cat-btn" onclick="filterCat('health',this)">💧 Health</button>
+    <button class="cat-btn" onclick="filterCat('sports',this)">🏀 Sports</button>
+    <button class="cat-btn" onclick="filterCat('culture',this)">🌉 Bay Area</button>
+    <button class="cat-btn" onclick="filterCat('fragrance',this)">💐 Fragrance</button>
+    <button class="cat-btn" onclick="filterCat('sneakers',this)">👟 Sneakers</button>
+    <button class="cat-btn" onclick="filterCat('tech',this)">💻 Tech</button>
+    <button class="cat-btn" onclick="filterCat('lifestyle',this)">🏠 Lifestyle</button>
+    <button class="cat-btn" onclick="filterCat('travel',this)">✈️ Travel</button>
+    <button class="cat-btn" onclick="filterCat('culture',this)">🎵 Music & Culture</button>
+  </div>
+</nav>
+
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item"><span>🏆</span>Top Sneakers All Time</span>
+    <span class="ticker-item"><span>🏆</span>Top Bay Area Artists</span>
+    <span class="ticker-item"><span>🏆</span>Top Water Brands by Purity</span>
+    <span class="ticker-item"><span>🏆</span>Top NBA Players All Time</span>
+    <span class="ticker-item"><span>🏆</span>Top Streamers Right Now</span>
+    <span class="ticker-item"><span>🏆</span>Top Colognes That Turn Heads</span>
+    <span class="ticker-item"><span>🏆</span>Top Dental Products by Health</span>
+    <span class="ticker-item"><span>🏆</span>Top NFL Stadiums</span>
+    <span class="ticker-item"><span>🏆</span>Top Mattress Brands</span>
+    <span class="ticker-item"><span>🏆</span>Top Gaming Consoles Retro</span>
+    <span class="ticker-item"><span>🏆</span>Top Bread Brands Worth Eating</span>
+    <span class="ticker-item"><span>🏆</span>Top Cooking Oils by Health</span>
+    <span class="ticker-item"><span>🏆</span>Top Fintech Apps 2026</span>
+    <span class="ticker-item"><span>🏆</span>Top Sneakers All Time</span>
+    <span class="ticker-item"><span>🏆</span>Top Bay Area Artists</span>
+    <span class="ticker-item"><span>🏆</span>Top Water Brands by Purity</span>
+    <span class="ticker-item"><span>🏆</span>Top NBA Players All Time</span>
+    <span class="ticker-item"><span>🏆</span>Top Streamers Right Now</span>
+    <span class="ticker-item"><span>🏆</span>Top Colognes That Turn Heads</span>
+    <span class="ticker-item"><span>🏆</span>Top Dental Products by Health</span>
+    <span class="ticker-item"><span>🏆</span>Top NFL Stadiums</span>
+    <span class="ticker-item"><span>🏆</span>Top Mattress Brands</span>
+    <span class="ticker-item"><span>🏆</span>Top Gaming Consoles Retro</span>
+    <span class="ticker-item"><span>🏆</span>Top Bread Brands Worth Eating</span>
+    <span class="ticker-item"><span>🏆</span>Top Cooking Oils by Health</span>
+    <span class="ticker-item"><span>🏆</span>Top Fintech Apps 2026</span>
+  </div>
+</div>
+
+<div class="section-head">
+  <h2>LIVE TOP LISTS</h2>
+  <p>Click any card to expand full commentary. Shop any pick with one tap.</p>
+</div>
+
+<!-- ═══════════════════ HEALTH ═══════════════════ -->
+<div class="cat-section-label" data-cat="health"><span>💧 Health & Wellness</span></div>
+<div class="lists-grid">
+
+  <!-- WATER -->
+  <div class="list-card" data-cat="health">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Health — Hydration</p><h3 class="card-title">Top 7 Water Brands by Purity</h3></div>
+      <span class="trophy-icon">💧</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Penta Ultra-Purified</p>
+          <p class="item-desc-compact">13-step solar purification. TDS under 10 ppm. The most scientifically pure water available.</p>
+          <p class="item-desc-full">A 13-step solar-powered purification process removes virtually every contaminant that exists. TDS under 10 ppm. No detectable heavy metals in any third-party lab test. If pure means pure then Penta wins on science alone. The premium price reflects a premium process that no other mainstream brand matches.</p>
+          <a class="shop-btn" href="https://amzn.to/4yul9GV" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Essentia Ionized Alkaline</p>
+          <p class="item-desc-compact">9.5 pH. TDS under 10 ppm. No detectable heavy metals. Clean and widely available.</p>
+          <p class="item-desc-full">Ionized at 9.5 pH with TDS under 10 ppm and no detectable heavy metals in independent testing. The alkaline angle has genuine hydration science behind it — higher pH water may help neutralize acid load in the body after exercise. One of the cleanest options at any grocery store.</p>
+          <a class="shop-btn" href="https://amzn.to/4w4Oczk" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Icelandic Glacial</p>
+          <p class="item-desc-compact">Filtered through volcanic lava rock for decades. Naturally alkaline pH 8.4. Non-detectable arsenic.</p>
+          <p class="item-desc-full">Filtered through volcanic lava rock for decades before being bottled. Naturally alkaline at pH 8.4. Non-detectable arsenic and lead in independent testing. The source — an ancient spring in Iceland — is one of the most pristine water sources on earth. What the ground does naturally here no industrial process fully replicates.</p>
+          <a class="shop-btn" href="https://amzn.to/3T6Auxn" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Voss Still Water</p>
+          <p class="item-desc-compact">Lowest TDS of any mainstream spring water at 22mg/L. Exceptionally clean neutral taste.</p>
+          <p class="item-desc-full">The lowest TDS of any mainstream spring water at just 22 mg/L. That mineral content is so low the water tastes exceptionally clean and neutral — which is exactly why water connoisseurs and chefs prefer it. The iconic cylindrical bottle is glass or BPA-free plastic protecting the purity inside.</p>
+          <a class="shop-btn" href="https://amzn.to/4whCBx8" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Crystal Geyser Alpine Spring</p>
+          <p class="item-desc-compact">Real alpine spring source. Most affordable genuine spring water. The Tops team personal go-to. 🌉</p>
+          <p class="item-desc-full">A real alpine spring source bottled at the source — not processed municipal water dressed up in premium packaging. The most affordable genuine spring water on the market and the personal go-to pick from the Tops team. Bay Area local. Clean ingredient list. Does exactly what spring water should do.</p>
+          <a class="shop-btn" href="https://amzn.to/45h4kln" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">6</div>
+        <div class="item-content">
+          <p class="item-name">Evian Natural Spring</p>
+          <p class="item-desc-compact">French Alps filtered 15 years. Zero measurable arsenic in independent testing. Consistently clean.</p>
+          <p class="item-desc-full">Filtered through the French Alps for over 15 years before reaching the bottle. Zero measurable arsenic in independent testing — important context given what happened when FIJI was tested in 2006. Evian has consistently clean third-party lab results across decades of testing.</p>
+          <a class="shop-btn" href="https://amzn.to/44zfAcL" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">7</div>
+        <div class="item-content">
+          <p class="item-name">FIJI Natural Artesian Water</p>
+          <p class="item-desc-compact">Volcanic rock filtered. Unique silica profile. Improved since 2006 — but read the honest note.</p>
+          <p class="item-desc-full">Volcanic rock filtered artesian water with a unique silica profile that genuinely tastes different from anything else. FIJI earns its place here on taste and source quality — but transparency requires the full story. In 2006 FIJI ran an ad mocking Cleveland's tap water. Cleveland tested FIJI in response and found 6.31 micrograms of arsenic per liter. Aquafina, Dasani, and Evian all had zero measurable arsenic in the same test. More recent independent testing shows FIJI's arsenic levels now at approximately 1 microgram per bottle, well within FDA limits of 10 micrograms per liter. The company has improved. The history is still real.</p>
+          <div class="item-honest-note">🏆 Tops Honest Note — FIJI improved significantly but their 2006 arsenic incident is documented fact. We include them because the product is good and current levels are safe. We note the history because you deserve to know it.</div>
+          <a class="shop-btn" href="https://amzn.to/4bRSbqO" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 312 agrees</span><span class="meta-item">👁 2.4k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- DENTAL -->
+  <div class="list-card" data-cat="health">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Health — Oral Care</p><h3 class="card-title">Top 5 Dental Products by Health</h3></div>
+      <span class="trophy-icon">🦷</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Oral-B iO Series 9</p>
+          <p class="item-desc-compact">AI pressure sensor stops enamel damage. The most advanced electric toothbrush available.</p>
+          <p class="item-desc-full">The AI-powered pressure sensor is the most important feature on this toothbrush. Brushing too hard is the number one cause of irreversible enamel damage and receding gums — and most people do it every single day without knowing. The iO Series 9 stops you in real time. At $219 this sounds expensive until you compare it to one crown which starts at $1,500.</p>
+          <a class="shop-btn" href="https://amzn.to/4yUMHpl" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Waterpik Ultra Water Flosser</p>
+          <p class="item-desc-compact">Reaches 40% of tooth surface that string floss misses every time. Clinically proven.</p>
+          <p class="item-desc-full">String floss misses 40 percent of tooth surface every single time. The gaps between teeth and below the gumline where bacteria actually hides are largely unreachable with string. Clinical studies show water flossers reduce gingivitis significantly more than string floss alone. This is the missing piece most people never knew they needed.</p>
+          <a class="shop-btn" href="https://amzn.to/4fOhSJZ" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Tom's of Maine Fluoride-Free</p>
+          <p class="item-desc-compact">No microplastics. No artificial preservatives. Natural ingredients you can actually read.</p>
+          <p class="item-desc-full">No artificial flavors. No preservatives. No microplastics — which have been found in multiple conventional toothpaste brands and raise legitimate questions about daily ingestion. Tom's of Maine uses natural ingredients with a clean production process. Ideal for people who prefer to mineralize naturally through diet and proper oral hygiene.</p>
+          <a class="shop-btn" href="https://amzn.to/45DnNwV" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Hello Activated Charcoal</p>
+          <p class="item-desc-compact">Natural whitening without harsh abrasives. Vegan, cruelty free, no sulfates.</p>
+          <p class="item-desc-full">Natural whitening without the harsh abrasives that thin enamel over time. Vegan, cruelty free, no sulfates, no artificial sweeteners. The activated charcoal binds to surface stains and lifts them gently rather than grinding them off. Visible whitening that does not come at the cost of enamel thickness.</p>
+          <a class="shop-btn" href="https://amzn.to/3TCSzDt" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Cocofloss Coconut Oil Dental Floss</p>
+          <p class="item-desc-compact">Coconut oil antimicrobial properties. Expands between teeth. Dentist recommended.</p>
+          <p class="item-desc-full">Coconut oil has natural antimicrobial properties that conventional waxed floss lacks entirely. Cocofloss expands as it moves between teeth creating a wider cleaning surface that catches more plaque than standard floss. Dentists consistently recommend it to patients who have switched and noticed the difference immediately.</p>
+          <a class="shop-btn" href="https://amzn.to/4fXY8nE" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 198 agrees</span><span class="meta-item">👁 1.6k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- BREAD -->
+  <div class="list-card" data-cat="health">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Health — Nutrition</p><h3 class="card-title">Top 2 Bread Brands Worth Eating</h3></div>
+      <span class="trophy-icon">🍞</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Dave's Killer Bread</p>
+          <p class="item-desc-compact">Organic whole grains, seeds, no HFCS. The bread that reformed its founder and an entire category.</p>
+          <p class="item-desc-full">Organic whole grains, seeds, no high fructose corn syrup, no artificial preservatives. Dave's Killer Bread was founded by a man who rebuilt his life after prison and built one of the most successful organic bread companies in America. The product lives up to the story — 21 whole grains and seeds in a loaf that tastes like bread is supposed to taste. The founding story of organic bread done right.</p>
+          <a class="shop-btn" href="https://amzn.to/4bRCJes" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Ezekiel 4:9 Sprouted Grain</p>
+          <p class="item-desc-compact">No flour at all. Whole sprouted grains and legumes. Higher protein, lower glycemic index.</p>
+          <p class="item-desc-full">No flour at all — which is rare in commercial bread. Whole sprouted grains and legumes fermented together. Higher protein, higher fiber, and a lower glycemic index than any conventional bread on the market. The sprouting process breaks down phytic acid which means your body absorbs more nutrients from every slice. This is not bread as most people know it — it is food engineered by ancient wisdom and modern nutrition science simultaneously.</p>
+          <div class="item-honest-note">🏆 Tops Honest Note — Most commercial white bread is ultra-processed stripped of every nutrient that made wheat valuable. The bread aisle is where most people make their worst daily food decision without realizing it. These two picks are the honest exceptions.</div>
+          <a class="shop-btn" href="https://amzn.to/460dqn4" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 241 agrees</span><span class="meta-item">👁 1.8k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- COOKING OIL -->
+  <div class="list-card" data-cat="health">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Health — Nutrition</p><h3 class="card-title">Top 3 Cooking Oils by Health</h3></div>
+      <span class="trophy-icon">🍳</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Chosen Foods Avocado Oil</p>
+          <p class="item-desc-compact">Highest smoke point at 520°F. Neutral flavor. Best all-purpose oil for high heat cooking.</p>
+          <p class="item-desc-full">Highest smoke point of any natural oil at 520°F. Neutral flavor that does not overpower food. Rich in oleic acid — the same heart-healthy monounsaturated fat in olive oil. The best all-purpose cooking oil for high heat applications including searing, roasting, and frying. The oil that performs at every temperature without breaking down into harmful compounds.</p>
+          <a class="shop-btn" href="https://amzn.to/3S7n4B9" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">California Olive Ranch EVOO</p>
+          <p class="item-desc-compact">Gold standard for cold use and dressings. One of the few brands with verified purity testing.</p>
+          <p class="item-desc-full">The gold standard for cold use, dressings, and low-heat cooking. California Olive Ranch is one of the few brands that publishes independent third-party purity testing — important because olive oil fraud is rampant. Many bottles labeled extra virgin olive oil contain cheaper oils blended in. California Olive Ranch is the honest pick in a category full of dishonest marketing.</p>
+          <a class="shop-btn" href="https://amzn.to/4xJ3IBo" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Nutiva Organic Coconut Oil</p>
+          <p class="item-desc-compact">Medium chain triglycerides. Stable at medium heat. Best for baking and specific applications.</p>
+          <p class="item-desc-full">Medium chain triglycerides that metabolize differently than long chain fats. Stable at medium heat up to 350°F. The best oil for baking, sautéing at medium heat, and specific applications where the mild coconut flavor enhances the dish. Organic and cold pressed — which matters for coconut oil quality in ways that are measurable in the final product.</p>
+          <a class="shop-btn" href="https://amzn.to/3U2HJH1" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 178 agrees</span><span class="meta-item">👁 1.3k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- DEODORANT -->
+  <div class="list-card" data-cat="health">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Health — Personal Care</p><h3 class="card-title">Top 4 Deodorants That Actually Work</h3></div>
+      <span class="trophy-icon">💪</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Native Deodorant</p>
+          <p class="item-desc-compact">Aluminum free, paraben free. Actually works all day. The clean switch that holds up.</p>
+          <p class="item-desc-full">Aluminum free, paraben free, and it actually works all day — which was the impossible promise of natural deodorants for years before Native figured out the formula. The aluminum-free conversation is real. Your lymph nodes are located directly in your armpit. What you apply there daily matters. Native proved you do not have to choose between clean ingredients and effective protection.</p>
+          <a class="shop-btn" href="https://amzn.to/4gMyRyJ" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Schmidt's Charcoal & Magnesium</p>
+          <p class="item-desc-compact">Most effective natural deodorant for heavy sweaters. 48 hour protection without aluminum.</p>
+          <p class="item-desc-full">Charcoal and magnesium formula provides 48 hour odor protection without aluminum compounds. The most effective natural deodorant for heavy sweaters — the segment that conventional natural deodorants consistently failed. Schmidt's solved this with a more aggressive natural formula that actually competes with clinical strength conventional products.</p>
+          <a class="shop-btn" href="https://amzn.to/3RqE7xu" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Dove Advanced Care Women</p>
+          <p class="item-desc-compact">48 hour antiperspirant with coconut care. Most moisturizing mainstream option.</p>
+          <a class="shop-btn" href="https://amzn.to/4wbj9Sp" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Old Spice Aluminum Free</p>
+          <p class="item-desc-compact">24/7 lasting freshness without aluminum. Familiar scent in a cleaner formula.</p>
+          <a class="shop-btn" href="https://amzn.to/4puQyFa" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 267 agrees</span><span class="meta-item">👁 2.0k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- MENSTRUAL -->
+  <div class="list-card" data-cat="health">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Health — Women's Wellness</p><h3 class="card-title">Top 5 Menstrual Products by Safety</h3></div>
+      <span class="trophy-icon">🌿</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Natracare Organic Tampons</p>
+          <p class="item-desc-compact">Organic since 1989. 100% toxin-free, plastic-free, compostable. The original clean period brand.</p>
+          <p class="item-desc-full">Organic since 1989 — before organic personal care was a marketing term. 100% toxin-free, plastic-free, and compostable. Natracare led this category before anyone else was paying attention and their standards have never dropped. The original clean period brand that proved it was possible when every competitor said it was not.</p>
+          <a class="shop-btn" href="https://amzn.to/4x4zWGW" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">LOLA Organic Tampons</p>
+          <p class="item-desc-compact">Organic cotton. No chlorine bleach. No synthetic fragrance. BPA-free applicator.</p>
+          <p class="item-desc-full">Organic cotton, no chlorine bleaching, no synthetic fragrance, BPA-free applicator. Made by women who asked the simple question — why does no one disclose what is inside a product used internally every month? The answer was regulatory failure. LOLA built a brand around the transparency that the industry refused to provide voluntarily.</p>
+          <a class="shop-btn" href="https://amzn.to/4yGyTP1" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Rael Organic Cotton Pads</p>
+          <p class="item-desc-compact">Certified organic cotton. No toxins, no chlorine bleach, no artificial fragrance.</p>
+          <a class="shop-btn" href="https://amzn.to/4yJc90I" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Saalt Menstrual Cup</p>
+          <p class="item-desc-compact">Medical-grade silicone. Lasts 10 years. Zero monthly waste. The healthiest switch you can make.</p>
+          <p class="item-desc-full">Medical-grade silicone with no chemicals, no absorption concerns, and no monthly waste generation. Lasts up to 10 years with proper care. The most sustainable and arguably the healthiest option on this list because it eliminates the product contact entirely and replaces it with inert medical silicone. The learning curve is real. The payoff in health and sustainability is worth it.</p>
+          <a class="shop-btn" href="https://amzn.to/3Tidb3T" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Cora Organic Tampons</p>
+          <p class="item-desc-compact">Organic with a social mission. Gives back globally with every purchase.</p>
+          <a class="shop-btn" href="https://amzn.to/4cd9cfh" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 334 agrees</span><span class="meta-item">👁 2.7k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ SPORTS ═══════════════════ -->
+<div class="cat-section-label" data-cat="sports"><span>🏀 Sports</span></div>
+<div class="lists-grid">
+
+  <!-- NBA ALL TIME -->
+  <div class="list-card" data-cat="sports">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">NBA — All Time</p><h3 class="card-title">Top 5 NBA Players of All Time</h3></div>
+      <span class="trophy-icon">🏀</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Michael Jordan</p>
+          <p class="item-desc-compact">6 for 6 in the Finals. The blueprint. The standard everything is measured against.</p>
+          <p class="item-desc-full">Six Finals appearances. Six championships. Six Finals MVP awards. A 0.000 Finals loss rate that has never been matched and may never be. Jordan did not just win — he won in a way that made every opponent look helpless. The 1996 Bulls went 72-10 and then won the title. The standard everything else in basketball is measured against for all time.</p>
+          <a class="shop-btn" href="https://amzn.to/4vQyZBS" target="_blank" rel="nofollow">Shop Jordan Gear</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Stephen Curry</p>
+          <p class="item-desc-compact">Changed basketball's geometry forever. 4 championships. Bay Area built. 🌉</p>
+          <p class="item-desc-full">Changed the geometry of basketball so completely that the game played in 2026 looks nothing like the game played before him. Three-point shooting went from a specialty skill to the foundation of every offensive system at every level because of what Curry proved was possible. Four championships. Two MVP awards. Built his entire legacy in the Bay Area. 🌉</p>
+          <a class="shop-btn" href="https://amzn.to/4b21MuQ" target="_blank" rel="nofollow">Shop Curry Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">LeBron James</p>
+          <p class="item-desc-compact">Unmatched longevity. 4 titles with 4 teams. Now in Philly chasing #5 at 41.</p>
+          <p class="item-desc-full">The most complete basketball player in history in terms of sustained excellence across two decades and four different franchises. Championships with Cleveland, Miami, Los Angeles, and now chasing one in Philadelphia at 41 years old. The longevity alone is unprecedented. The four titles across four cities has never been done and may never be done again.</p>
+          <a class="shop-btn" href="https://amzn.to/4vULs6A" target="_blank" rel="nofollow">Shop LeBron 76ers</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Nikola Jokic</p>
+          <p class="item-desc-compact">Three MVP awards. Most efficient big man in NBA history.</p>
+          <a class="shop-btn" href="https://amzn.to/4f1e340" target="_blank" rel="nofollow">Shop Jokic Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Jayson Tatum</p>
+          <p class="item-desc-compact">Two championships before 28. The best player of his generation right now.</p>
+          <a class="shop-btn" href="https://amzn.to/4fe8Dnr" target="_blank" rel="nofollow">Shop Tatum Jersey</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 634 agrees</span><span class="meta-item">👁 4.1k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- VALKYRIES -->
+  <div class="list-card" data-cat="sports">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">WNBA — Golden State</p><h3 class="card-title">Top 3 Valkyries Players Right Now</h3></div>
+      <span class="trophy-icon">🌉</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Tiffany Hayes #15</p>
+          <p class="item-desc-compact">22 pts on 72.7% FG vs Sparks. The veteran closer every contender needs.</p>
+          <p class="item-desc-full">The veteran closer this team was built around. 22 points on 72.7% shooting against the Sparks. 14 points on 62% against Chicago. The experience and composure in big moments that young teams cannot manufacture. When the Valkyries need a basket Hayes gets it. The most important player on this roster when the game is on the line.</p>
+          <a class="shop-btn" href="https://amzn.to/4fWjBNC" target="_blank" rel="nofollow">Watch on Prime</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Veronica Burton #22</p>
+          <p class="item-desc-compact">7 assists, 3 steals vs Sparks. The heartbeat and defensive engine of this team.</p>
+          <p class="item-desc-full">The heartbeat of this team and the reason their defense is elite. 7 assists and 3 steals against the Sparks. Controls the game without needing to dominate scoring. A nightmare for opposing point guards and the connective tissue that makes everything else work. This is what great point guard play looks like at the highest level.</p>
+          <a class="shop-btn" href="https://amzn.to/4fWjBNC" target="_blank" rel="nofollow">Watch on Prime</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Cecilia Zandalasini #24</p>
+          <p class="item-desc-compact">5 for 5 from three. 15 points in best performance of the season. Unguardable when hot.</p>
+          <a class="shop-btn" href="https://amzn.to/4fWjBNC" target="_blank" rel="nofollow">Watch on Prime</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 156 agrees</span><span class="meta-item">👁 890 views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- QBs -->
+  <div class="list-card" data-cat="sports">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">NFL — 2026 Season</p><h3 class="card-title">Top 5 QBs Heading Into 2026</h3></div>
+      <span class="trophy-icon">🏈</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Patrick Mahomes</p>
+          <p class="item-desc-compact">3 Super Bowl rings. The most decorated QB of his generation. Chiefs built to win again.</p>
+          <a class="shop-btn" href="https://amzn.to/4x7KuFG" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Jalen Hurts</p>
+          <p class="item-desc-compact">Philadelphia is loaded. LeBron brings celebrity but Hurts brings the play that wins games.</p>
+          <a class="shop-btn" href="https://amzn.to/4xDtBT1" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">CJ Stroud</p>
+          <p class="item-desc-compact">Most efficient young QB in the league. Houston is building something real around him.</p>
+          <a class="shop-btn" href="https://amzn.to/4bMGr9i" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Lamar Jackson</p>
+          <p class="item-desc-compact">Back to back MVP. Most dynamic player in football when healthy.</p>
+          <a class="shop-btn" href="https://amzn.to/45wE3jn" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Brock Purdy</p>
+          <p class="item-desc-compact">Undrafted. Last pick. Three straight NFC Championship appearances. The ultimate underdog. 🌉</p>
+          <a class="shop-btn" href="https://amzn.to/4plEiXn" target="_blank" rel="nofollow">Shop 49ers Gear</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 423 agrees</span><span class="meta-item">👁 3.1k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ BAY AREA ═══════════════════ -->
+<div class="cat-section-label" data-cat="culture"><span>🌉 Bay Area Culture</span></div>
+<div class="lists-grid">
+
+  <!-- BAY ARTISTS ALL TIME -->
+  <div class="list-card" data-cat="culture">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Bay Area — Music</p><h3 class="card-title">Top 5 Bay Area Artists All Time</h3></div>
+      <span class="trophy-icon">🌉</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Tupac Shakur</p>
+          <p class="item-desc-compact">Oakland born. The most influential rapper in history started right here.</p>
+          <p class="item-desc-full">Oakland born. Attended Fremont High School in Oakland before moving to Baltimore and eventually Marin City. The most influential rapper in history started right here. The combination of political consciousness, raw emotion, and lyrical precision that defined Tupac's work has never been replicated. Everything Bay Area hip hop built was built on his foundation.</p>
+          <a class="shop-btn" href="https://amzn.to/4fb0UoT" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">E-40</p>
+          <p class="item-desc-compact">Vallejo legend. 35 years deep. Created his own slang, label, and lane.</p>
+          <a class="shop-btn" href="https://amzn.to/4aRsma7" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Too Short</p>
+          <p class="item-desc-compact">Oakland original. Three decades of consistency. Built the West Coast rap blueprint.</p>
+          <a class="shop-btn" href="https://amzn.to/4vvf5LE" target="_blank" rel="nofollow">Shop Album</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Mac Dre</p>
+          <p class="item-desc-compact">Vallejo king who created the hyphy movement. Gone too soon. Never forgotten.</p>
+          <a class="shop-btn" href="https://amzn.to/4c7snaB" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">MC Hammer</p>
+          <p class="item-desc-compact">Oakland born. First Bay Area artist to go truly global. Opened the door for everyone after.</p>
+          <a class="shop-btn" href="https://amzn.to/4vAunPn" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 521 agrees</span><span class="meta-item">👁 3.2k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- BAY FAMOUS PEOPLE -->
+  <div class="list-card" data-cat="culture">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Bay Area — Icons</p><h3 class="card-title">Top 8 Most Famous Bay Area Icons</h3></div>
+      <span class="trophy-icon">🌉</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Steve Jobs</p>
+          <p class="item-desc-compact">Cupertino. Built Apple in a garage. Changed every industry on earth.</p>
+          <a class="shop-btn" href="https://amzn.to/4vYyndq" target="_blank" rel="nofollow">Shop Biography</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Tupac Shakur</p>
+          <p class="item-desc-compact">Oakland. The most influential rapper in history.</p>
+          <a class="shop-btn" href="https://amzn.to/4fb0UoT" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Zendaya</p>
+          <p class="item-desc-compact">Oakland born. Two Emmy Awards. One of the biggest stars in the world right now.</p>
+          <a class="shop-btn" href="https://amzn.to/3T28tXN" target="_blank" rel="nofollow">Shop Book</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Stephen Curry</p>
+          <p class="item-desc-compact">Changed basketball forever. The Bay's modern icon. 4 championships.</p>
+          <a class="shop-btn" href="https://amzn.to/4b21MuQ" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Robin Williams</p>
+          <p class="item-desc-compact">Marin County. The greatest comedian who ever lived.</p>
+          <a class="shop-btn" href="https://amzn.to/4ynPKpy" target="_blank" rel="nofollow">Shop Biography</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">6</div>
+        <div class="item-content">
+          <p class="item-name">Tom Brady</p>
+          <p class="item-desc-compact">Serra High School San Mateo. 7 Super Bowls. Greatest QB in NFL history.</p>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">7</div>
+        <div class="item-content">
+          <p class="item-name">Marshawn Lynch</p>
+          <p class="item-desc-compact">Oakland Tech. Beast Mode. Might run for Mayor. Never left his city.</p>
+          <a class="shop-btn" href="https://amzn.to/3TjPzLY" target="_blank" rel="nofollow">Shop Raiders Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">8</div>
+        <div class="item-content">
+          <p class="item-name">Alysa Liu</p>
+          <p class="item-desc-compact">Oakland born. 2026 Olympic double gold medalist in figure skating. The Bay's newest legend. 🥇🥇</p>
+          <a class="shop-btn" href="https://amzn.to/4pF9aTf" target="_blank" rel="nofollow">Shop Biography</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 489 agrees</span><span class="meta-item">👁 3.6k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- BAY MOVIES -->
+  <div class="list-card" data-cat="culture">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Bay Area — Film</p><h3 class="card-title">Top 8 Movies Set in the Bay Area</h3></div>
+      <span class="trophy-icon">🎬</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Dirty Harry (1971)</p>
+          <p class="item-desc-compact">Made SF look like the most cinematic city in America. It is.</p>
+          <a class="shop-btn" href="https://amzn.to/4fgGJWC" target="_blank" rel="nofollow">Shop Blu-Ray</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Mrs. Doubtfire (1993)</p>
+          <p class="item-desc-compact">Robin Williams. Filmed entirely in SF. The Bay's most beloved film.</p>
+          <a class="shop-btn" href="https://amzn.to/4aVH7bY" target="_blank" rel="nofollow">Shop Blu-Ray</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">The Matrix (1999)</p>
+          <p class="item-desc-compact">Filmed in Oakland and SF. The most influential sci-fi film in 30 years was made here.</p>
+          <a class="shop-btn" href="https://amzn.to/4pjl9FP" target="_blank" rel="nofollow">Shop 4K</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Fruitvale Station (2013)</p>
+          <p class="item-desc-compact">Ryan Coogler's debut. True Oakland story. Most important Bay Area film of the modern era.</p>
+          <a class="shop-btn" href="https://amzn.to/4wIT90O" target="_blank" rel="nofollow">Shop DVD</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Pursuit of Happyness (2006)</p>
+          <p class="item-desc-compact">Will Smith. True SF story. The most motivating movie about building from nothing ever made.</p>
+          <a class="shop-btn" href="https://amzn.to/4wFMfJo" target="_blank" rel="nofollow">Shop Blu-Ray</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">6</div>
+        <div class="item-content">
+          <p class="item-name">Hulk (2003)</p>
+          <p class="item-desc-compact">UC Berkeley campus and SF finale. The Bay gave this film its entire visual identity.</p>
+          <a class="shop-btn" href="https://amzn.to/4ydB6RM" target="_blank" rel="nofollow">Shop 4K</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">7</div>
+        <div class="item-content">
+          <p class="item-name">Godzilla (2014)</p>
+          <p class="item-desc-compact">Downtown SF and Oakland as the battleground. The Bay never looked more cinematic.</p>
+          <a class="shop-btn" href="https://amzn.to/453v5d2" target="_blank" rel="nofollow">Shop 4K</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">8</div>
+        <div class="item-content">
+          <p class="item-name">Shang-Chi (2021)</p>
+          <p class="item-desc-compact">SF Chinatown. The MCU discovered the Bay and made it look incredible.</p>
+          <a class="shop-btn" href="https://amzn.to/4fwWV7z" target="_blank" rel="nofollow">Shop 4K</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 367 agrees</span><span class="meta-item">👁 2.8k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ FRAGRANCE ═══════════════════ -->
+<div class="cat-section-label" data-cat="fragrance"><span>💐 Fragrance</span></div>
+<div class="lists-grid">
+
+  <!-- COLOGNE -->
+  <div class="list-card" data-cat="fragrance">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Men's Grooming</p><h3 class="card-title">Top 5 Colognes That Turn Heads</h3></div>
+      <span class="trophy-icon">🔥</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Creed Aventus</p>
+          <p class="item-desc-compact">Most talked about men's fragrance in 20 years. If you know you know.</p>
+          <p class="item-desc-full">The most talked about men's fragrance of the last 20 years and the conversation has never stopped. Pineapple and blackcurrant open on top before drying down to a smoky birch and ambergris base that is unlike anything else in perfumery. The longevity is exceptional. The projection commands a room. At $380 it is an investment — and every man who owns a bottle will tell you it is worth it without hesitation.</p>
+          <a class="shop-btn" href="https://amzn.to/4hDU8L9" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Tom Ford Oud Wood</p>
+          <p class="item-desc-compact">Most sophisticated cologne on this list. You will be asked what you are wearing.</p>
+          <a class="shop-btn" href="https://amzn.to/4wz07ps" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Dior Sauvage EDP</p>
+          <p class="item-desc-compact">Best selling men's cologne in the world. Fresh and masculine. Never wrong.</p>
+          <a class="shop-btn" href="https://amzn.to/3Twh8BT" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">YSL Y Men EDP</p>
+          <p class="item-desc-compact">Best cologne under $110 that competes with everything above it. Underrated.</p>
+          <a class="shop-btn" href="https://amzn.to/45uMLhR" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Versace Eros</p>
+          <p class="item-desc-compact">Most popular affordable option. Confident, fresh, never embarrasses you.</p>
+          <a class="shop-btn" href="https://amzn.to/44EWaDq" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 412 agrees</span><span class="meta-item">👁 2.8k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- PERFUME -->
+  <div class="list-card" data-cat="fragrance">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Women's Fragrance</p><h3 class="card-title">Top 5 Perfumes Worth Every Dollar</h3></div>
+      <span class="trophy-icon">💐</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Chanel Chance Eau Tendre</p>
+          <p class="item-desc-compact">Most iconic fragrance house in history. Fresh, floral, completely timeless.</p>
+          <a class="shop-btn" href="https://amzn.to/4wiioXU" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">YSL Libre EDP</p>
+          <p class="item-desc-compact">Most talked about women's fragrance of the last 5 years. Powerful and distinctive.</p>
+          <a class="shop-btn" href="https://amzn.to/3RuL4h0" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Miss Dior EDP</p>
+          <p class="item-desc-compact">Romantic, feminine, sophisticated. Most gifted women's perfume for a reason.</p>
+          <a class="shop-btn" href="https://amzn.to/4f93jlm" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Maison Margiela Jazz Club</p>
+          <p class="item-desc-compact">Not just a fragrance — a memory. Tobacco, vanilla, wood. You will be asked.</p>
+          <a class="shop-btn" href="https://amzn.to/4vLah5d" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Viktor & Rolf Flowerbomb</p>
+          <p class="item-desc-compact">An explosion of flowers 20 years ago that has never gone out of style.</p>
+          <a class="shop-btn" href="https://amzn.to/4pt7mMJ" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 389 agrees</span><span class="meta-item">👁 2.1k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ SNEAKERS ═══════════════════ -->
+<div class="cat-section-label" data-cat="sneakers"><span>👟 Sneakers & Fashion</span></div>
+<div class="lists-grid">
+
+  <div class="list-card" data-cat="sneakers">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Sneakers — All Time</p><h3 class="card-title">Top 5 Sneakers of All Time</h3></div>
+      <span class="trophy-icon">👟</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Air Jordan 1</p>
+          <p class="item-desc-compact">Started a cultural movement in 1985 that still runs the world 40 years later.</p>
+          <p class="item-desc-full">Started a cultural movement in 1985 that still runs the world 40 years later. Michael Jordan wore them. The NBA banned them. Nike paid the fines and kept selling them. That story alone made them legendary before a single consumer bought a pair. The colorway range across four decades means they are simultaneously the most historic and the most current sneaker in existence. No other shoe has maintained this level of cultural relevance for this long.</p>
+          <a class="shop-btn" href="https://amzn.to/4vQyZBS" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">New Balance 574</p>
+          <p class="item-desc-compact">Most slept on classic in sneaker history. The people who know have always known.</p>
+          <a class="shop-btn" href="https://amzn.to/3SIpFBn" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Adidas Samba OG</p>
+          <p class="item-desc-compact">From the soccer pitch to every major city on earth. The people's shoe of this generation.</p>
+          <a class="shop-btn" href="https://amzn.to/4ghCxs1" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Nike Dunk Low</p>
+          <p class="item-desc-compact">Defined the streetwear era. Still impossible to find in the best colorways.</p>
+          <a class="shop-btn" href="https://amzn.to/3SMPaBy" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Nike Air Force 1</p>
+          <p class="item-desc-compact">40 years old. Still in rotation. The most consistent sneaker ever made.</p>
+          <a class="shop-btn" href="https://amzn.to/4eYIWWC" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 547 agrees</span><span class="meta-item">👁 3.8k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- MATTRESSES -->
+  <div class="list-card" data-cat="lifestyle">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Lifestyle — Sleep</p><h3 class="card-title">Top 5 Mattress Brands Ranked</h3></div>
+      <span class="trophy-icon">😴</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Tempur-Pedic Adapt</p>
+          <p class="item-desc-compact">NASA material. 30 years perfecting pressure relief. The back pain solution that works.</p>
+          <p class="item-desc-full">NASA-developed material that has been refined for 30 years specifically for pressure relief and spinal alignment. The most recommended mattress by orthopedic surgeons and physical therapists in the United States. If you have back pain this is the honest first recommendation before any other intervention. You spend a third of your life on your mattress — this one earns the investment.</p>
+          <a class="shop-btn" href="https://amzn.to/4buUkJ0" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Saatva Classic</p>
+          <p class="item-desc-compact">Luxury hotel mattress you can own. Best for back sleepers. Worth every dollar.</p>
+          <a class="shop-btn" href="https://amzn.to/4h9mDAp" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Purple Original</p>
+          <p class="item-desc-compact">Polymer grid technology distributes weight unlike any foam or spring. Most innovative material.</p>
+          <a class="shop-btn" href="https://amzn.to/3TAE5nE" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Casper Original</p>
+          <p class="item-desc-compact">Started the bed-in-a-box revolution. Zoned support. Most versatile sleeper option.</p>
+          <a class="shop-btn" href="https://amzn.to/45ILq7a" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Nectar 12" Memory Foam</p>
+          <p class="item-desc-compact">365 night trial. Lifetime warranty. The most confident guarantee in the mattress industry.</p>
+          <a class="shop-btn" href="https://amzn.to/4xedKKp" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 298 agrees</span><span class="meta-item">👁 2.2k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ TECH ═══════════════════ -->
+<div class="cat-section-label" data-cat="tech"><span>💻 Tech</span></div>
+<div class="lists-grid">
+
+  <!-- TVs -->
+  <div class="list-card" data-cat="tech">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Tech — Home Theater</p><h3 class="card-title">Top 5 TVs to Buy Right Now</h3></div>
+      <span class="trophy-icon">📺</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">LG C4 OLED 65"</p>
+          <p class="item-desc-compact">Perfect blacks. Infinite contrast. The picture quality standard. Honest answer for movie lovers.</p>
+          <p class="item-desc-full">OLED technology produces perfect blacks because each pixel produces its own light and turns off completely in dark scenes. The result is infinite contrast ratio — the difference between what OLED looks like versus LED is visible to the human eye from across the room. If you watch movies, sports, or play games in a controlled light environment the LG C4 is the honest answer and it is not particularly close.</p>
+          <a class="shop-btn" href="https://amzn.to/4fXeZGW" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Sony Bravia 8 OLED 65"</p>
+          <p class="item-desc-compact">Cognitive processor XR mimics how humans see. Most natural picture of any TV available.</p>
+          <a class="shop-btn" href="https://amzn.to/4w9zJBh" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Hisense U8 Mini-LED 65"</p>
+          <p class="item-desc-compact">Best TV under $1,200 that genuinely competes with TVs twice its price.</p>
+          <a class="shop-btn" href="https://bit.ly/4fVxefY" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">TCL T7 QLED 144Hz 65"</p>
+          <p class="item-desc-compact">144Hz gaming mode. Google TV built in. Best value gaming TV on the market.</p>
+          <a class="shop-btn" href="https://amzn.to/4ggfqNY" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Samsung QLED Q7F 65"</p>
+          <p class="item-desc-compact">Brightness king. Best TV for well-lit rooms and sports viewing.</p>
+          <a class="shop-btn" href="https://amzn.to/45MPC5W" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 334 agrees</span><span class="meta-item">👁 2.5k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- GAMING CONSOLES -->
+  <div class="list-card" data-cat="tech">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Tech — Gaming</p><h3 class="card-title">Top 5 Gaming Consoles Retro & Current</h3></div>
+      <span class="trophy-icon">🎮</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">PlayStation 5</p>
+          <p class="item-desc-compact">Most powerful home console ever made. Haptic feedback. Lightning load times.</p>
+          <a class="shop-btn" href="https://amzn.to/4g0UJ7j" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Nintendo Switch OLED</p>
+          <p class="item-desc-compact">Home console and handheld in one. Nothing competes with its versatility.</p>
+          <a class="shop-btn" href="https://amzn.to/4wPiM0h" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Xbox Series X</p>
+          <p class="item-desc-compact">Most powerful console for Game Pass. 20 years of backward compatibility.</p>
+          <a class="shop-btn" href="https://amzn.to/3S41qxp" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Nintendo Wii (Renewed)</p>
+          <p class="item-desc-compact">Still plays GameCube games. Most innovative console of its generation. Under $135.</p>
+          <a class="shop-btn" href="https://amzn.to/45hhOhg" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Sega Genesis Mini</p>
+          <p class="item-desc-compact">42 built-in classics. Sonic. Streets of Rage. Golden Axe. The best retro purchase available.</p>
+          <a class="shop-btn" href="https://amzn.to/4x50gAY" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 456 agrees</span><span class="meta-item">👁 3.4k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ TRAVEL ═══════════════════ -->
+<div class="cat-section-label" data-cat="travel"><span>✈️ Travel</span></div>
+<div class="lists-grid">
+
+  <div class="list-card" data-cat="travel">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Travel — NFL</p><h3 class="card-title">Top 5 NFL Stadiums to Experience Live</h3></div>
+      <span class="trophy-icon">🏈</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Lambeau Field — Green Bay</p>
+          <p class="item-desc-compact">Most historic stadium in American sports. The frozen tundra. Titletown. Football history lives here.</p>
+          <a class="shop-btn" href="https://united.elfm.net/JkZzmR" target="_blank" rel="nofollow">✈️ Fly There ~$1,500</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Allegiant Stadium — Las Vegas</p>
+          <p class="item-desc-compact">Most technologically advanced stadium ever built. Raiders in the desert. Vegas Strip backdrop.</p>
+          <a class="shop-btn" href="https://united.elfm.net/6kzePV" target="_blank" rel="nofollow">✈️ Fly There ~$550</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Arrowhead — Kansas City</p>
+          <p class="item-desc-compact">Loudest stadium in NFL history. Chiefs Kingdom. Dec 27 vs 49ers. $248 on Southwest.</p>
+          <a class="shop-btn" href="https://swa.eyjo.net/5kzgZj" target="_blank" rel="nofollow">✈️ Fly There $248</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Lincoln Financial — Philadelphia</p>
+          <p class="item-desc-compact">Most passionate fan base in football. LeBron in the city. Oct 4 vs Rams. $349 nonstop.</p>
+          <a class="shop-btn" href="https://united.elfm.net/JkZz4a" target="_blank" rel="nofollow">✈️ Fly There $349</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Levi's Stadium — Santa Clara 🌉</p>
+          <p class="item-desc-compact">Bay Area football. World Cup was just here. BART to Warm Springs then VTA. Leave at 2-minute warning.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 287 agrees</span><span class="meta-item">👁 1.9k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ LIFESTYLE ═══════════════════ -->
+<div class="cat-section-label" data-cat="lifestyle"><span>🏠 Lifestyle</span></div>
+<div class="lists-grid">
+
+  <!-- COFFEE -->
+  <div class="list-card" data-cat="lifestyle">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Lifestyle — Coffee</p><h3 class="card-title">Top 4 Ways to Make Coffee in 2026</h3></div>
+      <span class="trophy-icon">☕</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Breville Barista Express</p>
+          <p class="item-desc-compact">Grinder built in. Cafe quality at home. Pays for itself in 6 months of skipping Starbucks.</p>
+          <p class="item-desc-full">The grinder is built directly into the machine which means beans go from whole to espresso in under a minute. Cafe quality shots at home. The math is simple — two Starbucks drinks per day at $7 each is $5,110 per year. This machine costs $699 once. It pays for itself in six months and then runs free forever. The most impactful coffee investment available.</p>
+          <a class="shop-btn" href="https://amzn.to/4wAmA4G" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Chemex Pour Over</p>
+          <p class="item-desc-compact">The slowest most intentional way to make coffee. The ritual is the point. Cleanest cup possible.</p>
+          <a class="shop-btn" href="https://amzn.to/45wEr1j" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Nespresso Vertuo Next</p>
+          <p class="item-desc-compact">60 second solution. Consistent. Clean. Perfect for busy mornings when the ritual is not the point.</p>
+          <a class="shop-btn" href="https://amzn.to/4wzPDoS" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Fellow Stagg EKG Pro Kettle</p>
+          <p class="item-desc-compact">Precision temperature control. Gooseneck spout. The tool that separates serious coffee people from everyone else.</p>
+          <a class="shop-btn" href="https://amzn.to/4gfaDuW" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 223 agrees</span><span class="meta-item">👁 1.7k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- WATCHES -->
+  <div class="list-card" data-cat="lifestyle">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Lifestyle — Watches</p><h3 class="card-title">Top 5 Watches to Own Right Now</h3></div>
+      <span class="trophy-icon">⌚</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Apple Watch Series 10</p>
+          <p class="item-desc-compact">Most capable wearable ever made. Health monitoring, GPS, crash detection. A doctor on your wrist.</p>
+          <p class="item-desc-full">Health monitoring, GPS tracking, crash detection, ECG, blood oxygen monitoring, and sleep tracking all in one device on your wrist. The Apple Watch Series 10 is thinner and faster than any previous model. For iPhone users there is no smarter daily wearable available at any price. The health data alone has been credited with detecting heart conditions and saving lives.</p>
+          <a class="shop-btn" href="https://amzn.to/4waPSXo" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Garmin Fenix 8</p>
+          <p class="item-desc-compact">Military grade durability. 28 day battery. Built for people who actually use what they wear.</p>
+          <a class="shop-btn" href="https://amzn.to/4wgLNkA" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Samsung Galaxy Watch 7</p>
+          <p class="item-desc-compact">Best Android smartwatch. Body composition analysis. The Apple Watch for Android users done right.</p>
+          <a class="shop-btn" href="https://amzn.to/4567J6F" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Seiko 5 Automatic</p>
+          <p class="item-desc-compact">Under $200 that looks like it costs $2,000. The best value watch in the world. Wear it forever.</p>
+          <a class="shop-btn" href="https://amzn.to/4pXPHNA" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Fossil Gen 6</p>
+          <p class="item-desc-compact">Most stylish smartwatch for people who care about aesthetics first. Classic design meets smart tech.</p>
+          <a class="shop-btn" href="https://amzn.to/3UajpD0" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 198 agrees</span><span class="meta-item">👁 1.4k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- SUNGLASSES -->
+  <div class="list-card" data-cat="lifestyle">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Lifestyle — Eyewear</p><h3 class="card-title">Top 5 Sunglasses Ranked Honestly</h3></div>
+      <span class="trophy-icon">😎</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Ray-Ban Wayfarer</p>
+          <p class="item-desc-compact">Most iconic eyewear frame in history. 65 years old. Still perfect. Investment that never depreciates.</p>
+          <p class="item-desc-full">The most iconic eyewear design in human history first released in 1956. Worn by every generation since then without ever going out of style. The Wayfarer silhouette is so fundamentally correct that every fashion era has adopted it and made it their own. 65 years later it is still the first frame any serious eyewear conversation starts with.</p>
+          <a class="shop-btn" href="https://amzn.to/4ckE7Gy" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Maui Jim Red Sands</p>
+          <p class="item-desc-compact">Most technologically advanced polarized lens available. If you spend time outdoors these are the ones.</p>
+          <a class="shop-btn" href="https://amzn.to/4wWCPtX" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Oakley Holbrook</p>
+          <p class="item-desc-compact">The performance standard. Athletes trust them. Built to stay on your face at full speed.</p>
+          <a class="shop-btn" href="https://amzn.to/4gbc8eQ" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Quay Wide Awake — Women</p>
+          <p class="item-desc-compact">Most fashion-forward affordable option. Celebrity collaborations done right.</p>
+          <a class="shop-btn" href="https://amzn.to/4yNDcrQ" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Blue Light Glasses</p>
+          <p class="item-desc-compact">Most underrated eye investment for screen users. Reduces digital eye strain significantly.</p>
+          <a class="shop-btn" href="https://amzn.to/4w1IgpV" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 176 agrees</span><span class="meta-item">👁 1.2k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- DESIGNER BRANDS -->
+  <div class="list-card" data-cat="lifestyle">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Lifestyle — Designer</p><h3 class="card-title">Top 5 Designer Pieces Worth the Investment</h3></div>
+      <span class="trophy-icon">👑</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Gucci GG Marmont Belt</p>
+          <p class="item-desc-compact">Most recognized luxury accessory on earth. Italian craftsmanship. Never goes out of style.</p>
+          <p class="item-desc-full">The GG Marmont belt is the most recognized luxury accessory in the world. Italian craftsmanship. The double G hardware is instantly recognizable at any distance. Luxury items that hold cultural recognition across decades are the ones that hold resale value — and this belt has done exactly that for over 20 years. The best designer piece is the one you wear forever.</p>
+          <a class="shop-btn" href="https://bit.ly/4fZhFUq" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Louis Vuitton Neverfull</p>
+          <p class="item-desc-compact">Most iconic luxury bag in history. Holds value like an asset not an accessory.</p>
+          <a class="shop-btn" href="https://bit.ly/4hVvCFA" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Coach Signature Crossbody</p>
+          <p class="item-desc-compact">American luxury that holds its own against European houses. Quality at accessible luxury pricing.</p>
+          <a class="shop-btn" href="https://bit.ly/4q8EObY" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Versace Sunglasses</p>
+          <p class="item-desc-compact">Bold, unapologetic, Mediterranean luxury. The brand that dresses people who want to be seen.</p>
+          <a class="shop-btn" href="https://amzn.to/44EWaDq" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Ray-Ban Wayfarer</p>
+          <p class="item-desc-compact">65 years old. Still perfect. The investment piece that never loses its cultural value.</p>
+          <a class="shop-btn" href="https://amzn.to/4ckE7Gy" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 312 agrees</span><span class="meta-item">👁 2.3k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- HOME OFFICE -->
+  <div class="list-card" data-cat="lifestyle">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Lifestyle — Home Office</p><h3 class="card-title">Top 4 Home Office Upgrades Worth Every Dollar</h3></div>
+      <span class="trophy-icon">💼</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Herman Miller Aeron Chair</p>
+          <p class="item-desc-compact">The last office chair you ever buy. 12 year warranty. Used in NASA labs. Pays for itself in back pain prevented.</p>
+          <p class="item-desc-full">The most scientifically engineered office chair ever made. The 8Z Pellicle suspension system distributes weight across the entire seating surface eliminating pressure points. 12 year full warranty means Herman Miller stands behind this chair longer than most people keep a car. Used in NASA engineering labs, Fortune 500 executive offices, and by anyone who sits for a living and takes it seriously. The last office chair you will ever buy.</p>
+          <a class="shop-btn" href="https://amzn.to/3RLdKmp" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">FlexiSpot E6 Standing Desk</p>
+          <p class="item-desc-compact">Sit all day and your body breaks down slowly. Stand some of the day and it does not. The science is settled.</p>
+          <a class="shop-btn" href="https://amzn.to/4wmfWPa" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Logitech MX Master 3S Mouse</p>
+          <p class="item-desc-compact">Best wireless mouse ever made for productivity. Magnetic scroll. Works on any surface including glass.</p>
+          <a class="shop-btn" href="https://amzn.to/4hN98H1" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Keychron K2 Mechanical Keyboard</p>
+          <p class="item-desc-compact">Best keyboard for people who type all day. Tactile feedback. Built to last a decade.</p>
+          <a class="shop-btn" href="https://amzn.to/4i26qx8" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 267 agrees</span><span class="meta-item">👁 2.0k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- SOUNDBARS -->
+  <div class="list-card" data-cat="lifestyle">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Lifestyle — Home Theater</p><h3 class="card-title">Top 3 Soundbars That Change How You Watch TV</h3></div>
+      <span class="trophy-icon">🔊</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Samsung HW-Q990D</p>
+          <p class="item-desc-compact">22 speakers. True 11.1.4 surround. Dolby Atmos. Most complete soundbar system ever made.</p>
+          <p class="item-desc-full">22 individual speakers including dedicated upward-firing drivers for Atmos height channels. True 11.1.4 surround sound without a receiver, without speaker wire running across the room, without any of the traditional home theater complexity. The most complete single-purchase audio solution ever built for a living room. Your TV has terrible built in speakers. This fixes it permanently.</p>
+          <a class="shop-btn" href="https://amzn.to/4wTBKCP" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Sonos Arc</p>
+          <p class="item-desc-compact">Most elegant soundbar for people who care about design as much as sound. Trueplay auto-calibrates to your room.</p>
+          <a class="shop-btn" href="https://amzn.to/4z8qRi8" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Bose Smart Soundbar 900</p>
+          <p class="item-desc-compact">Bose acoustic engineering in a slim profile. Best soundbar for music listening and TV equally.</p>
+          <a class="shop-btn" href="https://amzn.to/4z9JRN8" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 198 agrees</span><span class="meta-item">👁 1.5k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ AFTER WORK SNACKS ═══════════════════ -->
+<div class="cat-section-label" data-cat="health"><span>🍎 Snacks & Nutrition</span></div>
+<div class="lists-grid">
+
+  <!-- SNACKS -->
+  <div class="list-card" data-cat="health">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Health — Snacks</p><h3 class="card-title">Top 6 After Work Snacks That Respect Your Body</h3></div>
+      <span class="trophy-icon">🍎</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Chomps Grass Fed Beef Sticks</p>
+          <p class="item-desc-compact">Protein, no sugar, no preservatives. Fuel without the crash. The after work snack that actually works.</p>
+          <p class="item-desc-full">Grass fed and grass finished beef with zero sugar, zero artificial preservatives, and zero ingredients you cannot pronounce. 10 grams of protein per stick. The snack that fuels you without the insulin spike and crash that comes with conventional snacks. What you eat after work is what your body rebuilds itself with overnight. Chomps respects that biology.</p>
+          <a class="shop-btn" href="https://amzn.to/4pSfQx4" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Olipop Prebiotic Soda</p>
+          <p class="item-desc-compact">Tastes like soda. Works like a probiotic. The guilt-free fizzy drink that replaces Coke.</p>
+          <a class="shop-btn" href="https://amzn.to/4yXy04H" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">RXBAR Protein Bar Variety</p>
+          <p class="item-desc-compact">Egg whites, dates, nuts. Ingredient list is literally on the front. Zero hiding.</p>
+          <a class="shop-btn" href="https://amzn.to/3TFb5uU" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">PopCorners Protein Chips</p>
+          <p class="item-desc-compact">The chip that replaced regular chips. Real protein. Real crunch. Real ingredients.</p>
+          <a class="shop-btn" href="https://amzn.to/3ROpc0f" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">LesserEvil Organic Popcorn</p>
+          <p class="item-desc-compact">Organic, no artificial flavors, no GMO. The popcorn that does not betray you at 6PM.</p>
+          <a class="shop-btn" href="https://amzn.to/4fQEoC2" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">6</div>
+        <div class="item-content">
+          <p class="item-name">KIND Bars Variety Pack</p>
+          <p class="item-desc-compact">Nuts and honey. Real ingredients. The bar that started the clean snack revolution.</p>
+          <a class="shop-btn" href="https://amzn.to/4h8NQTN" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 289 agrees</span><span class="meta-item">👁 2.1k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- BODY WASH MEN -->
+  <div class="list-card" data-cat="health">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Health — Men's Grooming</p><h3 class="card-title">Top 4 Men's Body Wash Brands</h3></div>
+      <span class="trophy-icon">🚿</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Dr. Squatch Natural Soap</p>
+          <p class="item-desc-compact">Natural ingredients, masculine scents, no synthetic chemicals. The upgrade most men never knew they needed.</p>
+          <p class="item-desc-full">Cold process soap made with natural oils and ingredients you can actually read. No parabens, no sulfates, no synthetic dyes. The scents are genuinely distinctive — Pine Tar, Cedar Citrus, Bay Rum — and the lather is richer than any drugstore body wash. The most talked about men's grooming upgrade of the last five years and every man who switched has not gone back.</p>
+          <a class="shop-btn" href="https://amzn.to/4bV1CWu" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Every Man Jack Cedar Body Wash</p>
+          <p class="item-desc-compact">Clean ingredients. Natural fragrance. The mainstream natural option that actually delivers.</p>
+          <a class="shop-btn" href="https://amzn.to/4fNDNSM" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Dr. Bronner's Peppermint</p>
+          <p class="item-desc-compact">18 uses. Organic. Fair trade. The most versatile cleaning product ever made.</p>
+          <a class="shop-btn" href="https://amzn.to/3Td548A" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Old Spice Swagger</p>
+          <p class="item-desc-compact">The classic that never stopped working. Reliable, affordable, masculine. No overthinking needed.</p>
+          <a class="shop-btn" href="https://amzn.to/4fqNrJT" target="_blank" rel="nofollow">Shop This Pick</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 167 agrees</span><span class="meta-item">👁 1.1k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ NFL SPORTS EXTENDED ═══════════════════ -->
+<div class="cat-section-label" data-cat="sports"><span>🏈 NFL 2026</span></div>
+<div class="lists-grid">
+
+  <!-- NFL QBs -->
+  <div class="list-card" data-cat="sports">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">NFL — 2026 Season</p><h3 class="card-title">Top 5 QBs Heading Into 2026 NFL Season</h3></div>
+      <span class="trophy-icon">🏈</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Patrick Mahomes</p>
+          <p class="item-desc-compact">3 Super Bowl rings. The most decorated QB of his generation. Chiefs built to win again.</p>
+          <p class="item-desc-full">Three Super Bowl rings and a résumé that already places him in the all-time conversation before age 32. The Chiefs offensive system is built around his ability to extend plays and find throws that other QBs simply do not have the arm talent or processing speed to make. When Mahomes is healthy the Chiefs are the most dangerous team in football. That has been true for five consecutive seasons.</p>
+          <a class="shop-btn" href="https://amzn.to/4x7KuFG" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Jalen Hurts</p>
+          <p class="item-desc-compact">Philadelphia is loaded. LeBron brings celebrity but Hurts brings the quarterback play that wins.</p>
+          <a class="shop-btn" href="https://amzn.to/4xDtBT1" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">CJ Stroud</p>
+          <p class="item-desc-compact">Most efficient young QB in the league. Houston is building something real around him.</p>
+          <a class="shop-btn" href="https://amzn.to/4bMGr9i" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Lamar Jackson</p>
+          <p class="item-desc-compact">Back to back MVP. Most dynamic player in football when healthy. Ravens always a threat.</p>
+          <a class="shop-btn" href="https://amzn.to/45wE3jn" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Brock Purdy</p>
+          <p class="item-desc-compact">Undrafted. Last pick. Three straight NFC Championship appearances. The ultimate underdog. 🌉</p>
+          <a class="shop-btn" href="https://amzn.to/4plEiXn" target="_blank" rel="nofollow">Shop 49ers Gear</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 423 agrees</span><span class="meta-item">👁 3.1k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- NFL RBs -->
+  <div class="list-card" data-cat="sports">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">NFL — 2026 Season</p><h3 class="card-title">Top 5 Running Backs Going Into 2026</h3></div>
+      <span class="trophy-icon">🏈</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Derrick Henry</p>
+          <p class="item-desc-compact">32 years old. Still the most punishing runner in the NFL. Physical decline has not arrived.</p>
+          <p class="item-desc-full">At 32 years old Derrick Henry is still the most physically punishing runner in the NFL and the decline everyone predicted has simply not arrived. The combination of size, speed, and power that makes King Henry unique is not something that diminishes gradually — it either works or it does not. Right now it still works at an elite level and every defense that faces the Ravens game plans around him first.</p>
+          <a class="shop-btn" href="https://amzn.to/3RWBt34" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Saquon Barkley</p>
+          <p class="item-desc-compact">2025 NFL rushing champion. Eagles. Most complete running back in the game right now.</p>
+          <a class="shop-btn" href="https://amzn.to/4qmuxsG" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Ashton Jeanty</p>
+          <p class="item-desc-compact">Most electrifying RB in the 2026 draft class. Raiders. Heal fast — Raider Nation needs you. 🏴‍☠️🙏</p>
+          <a class="shop-btn" href="https://amzn.to/4wPVzdG" target="_blank" rel="nofollow">Shop Jersey</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Jahmyr Gibbs</p>
+          <p class="item-desc-compact">Detroit Lions young gun. Ready to leap to elite status this season.</p>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Bijan Robinson</p>
+          <p class="item-desc-compact">Atlanta Falcons. Year 3 is when stars emerge. The most gifted pure runner of his draft class.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 378 agrees</span><span class="meta-item">👁 2.7k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ MUSIC & CULTURE ═══════════════════ -->
+<div class="cat-section-label" data-cat="culture"><span>🎵 Music & Culture</span></div>
+<div class="lists-grid">
+
+  <!-- TOP SONGS -->
+  <div class="list-card" data-cat="culture">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Music — Billboard Hot 100</p><h3 class="card-title">Top 5 Songs Running the Charts Right Now</h3></div>
+      <span class="trophy-icon">🎵</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Ella Langley — Choosin Texas</p>
+          <p class="item-desc-compact">15 weeks at number 1. A country song that crossed every genre barrier. The biggest song of 2026.</p>
+          <a class="shop-btn" href="https://amzn.to/45HdBni" target="_blank" rel="nofollow">Shop Album</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Ariana Grande — petal era</p>
+          <p class="item-desc-compact">No features. All Ariana. The most anticipated album of the summer delivered.</p>
+          <a class="shop-btn" href="https://amzn.to/4intNBx" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Morgan Wallen — I'm The Problem</p>
+          <p class="item-desc-compact">Country's most consistent voice right now. This one hits harder than anything he has made.</p>
+          <a class="shop-btn" href="https://amzn.to/4qtj9eu" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Taylor Swift — Life of a Showgirl</p>
+          <p class="item-desc-compact">The Ophelia era is real and the orange glitter vinyl is the collector's piece of the year.</p>
+          <a class="shop-btn" href="https://amzn.to/3UwoXrI" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Bruno Mars — I Just Might</p>
+          <p class="item-desc-compact">Topped Billboard 200 in March. Still in the top 5 in August. Mars is back for real.</p>
+          <a class="shop-btn" href="https://amzn.to/4bCzbg9" target="_blank" rel="nofollow">Shop Album</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 445 agrees</span><span class="meta-item">👁 3.3k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- TOP ALBUMS 2026 -->
+  <div class="list-card" data-cat="culture">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Music — Albums 2026</p><h3 class="card-title">Top 5 Albums of 2026 So Far</h3></div>
+      <span class="trophy-icon">🎵</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Olivia Rodrigo — You Seem Pretty Sad</p>
+          <p class="item-desc-compact">Most critically praised pop album of the year. Follows GUTS with even more emotional precision.</p>
+          <a class="shop-btn" href="https://amzn.to/45NcNgw" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Ella Langley — Dandelion</p>
+          <p class="item-desc-compact">The album behind the biggest song of 2026. Country crossed into everywhere.</p>
+          <a class="shop-btn" href="https://amzn.to/4hmv4sg" target="_blank" rel="nofollow">Shop Album</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Bruno Mars — The Romantic</p>
+          <p class="item-desc-compact">First solo album in nearly 10 years. Topped Billboard 200. Worth every year of the wait.</p>
+          <a class="shop-btn" href="https://amzn.to/4bCzbg9" target="_blank" rel="nofollow">Shop Album</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Gorillaz — The Mountain</p>
+          <p class="item-desc-compact">Highest rated album of 2026 across critic aggregators. Most original album from the most original band.</p>
+          <a class="shop-btn" href="https://amzn.to/4z47zdP" target="_blank" rel="nofollow">Shop Album</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Drake — Ice Man</p>
+          <p class="item-desc-compact">Broke Michael Jackson's Hot 100 record with the single Janice STFU. Historic regardless of where you stand on Drake.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 389 agrees</span><span class="meta-item">👁 2.8k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- TV SHOWS ALL TIME -->
+  <div class="list-card" data-cat="culture">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Culture — Television</p><h3 class="card-title">Top 5 TV Shows of All Time</h3></div>
+      <span class="trophy-icon">📺</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">The Wire</p>
+          <p class="item-desc-compact">A documentary about America disguised as a crime show. The most accurate portrait of institutional failure ever put on television.</p>
+          <p class="item-desc-full">The Wire is not a TV show. It is a sociological study of how institutions — police departments, drug organizations, schools, newspapers, city governments — consistently fail the people they are supposed to serve. David Simon created something that gets more relevant every year that passes. If you have not watched The Wire you have not seen television's highest achievement.</p>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">The Sopranos</p>
+          <p class="item-desc-compact">Invented the prestige TV era. Before Tony Soprano antihero drama did not exist.</p>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Breaking Bad</p>
+          <p class="item-desc-compact">Most perfect character arc in television history. Walter White from chemistry teacher to empire builder. Flawless.</p>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Seinfeld</p>
+          <p class="item-desc-compact">Built modern comedy. Every show after it borrowed from it. The blueprint for observational storytelling.</p>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Chappelle's Show</p>
+          <p class="item-desc-compact">Most fearless 2 seasons in comedy history. Dave walked away at the top. That took courage.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 678 agrees</span><span class="meta-item">👁 4.9k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- TV SHOWS IN SEASON -->
+  <div class="list-card" data-cat="culture">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Culture — TV Now</p><h3 class="card-title">Top 5 TV Shows in Season Right Now</h3></div>
+      <span class="trophy-icon">📺</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">House of the Dragon S3 — HBO</p>
+          <p class="item-desc-compact">Dragons flying. Wigs on. Sunday nights belong to HBO. Most visually stunning show on television.</p>
+          <a class="shop-btn" href="https://amzn.to/4fWjBNC" target="_blank" rel="nofollow">Watch on Prime</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">The Bear Final Season — FX/Hulu</p>
+          <p class="item-desc-compact">The most intense show on television ends this summer. Every episode feels like a controlled explosion.</p>
+          <a class="shop-btn" href="https://amzn.to/4fWjBNC" target="_blank" rel="nofollow">Watch on Prime</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Reacher Season 2 — Prime Video</p>
+          <p class="item-desc-compact">Jack Reacher does not negotiate. He just shows up. Most satisfying action show on television.</p>
+          <a class="shop-btn" href="https://amzn.to/4ztdqth" target="_blank" rel="nofollow">Shop DVD</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Special Ops Lioness S2 — Paramount+</p>
+          <p class="item-desc-compact">Zoe Saldana leading the most underrated action drama on streaming right now.</p>
+          <a class="shop-btn" href="https://amzn.to/4iiTOlp" target="_blank" rel="nofollow">Shop DVD</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">Ted Lasso S4 — Apple TV+</p>
+          <p class="item-desc-compact">The show that made the world feel better is back. The timing could not be more perfect.</p>
+          <a class="shop-btn" href="https://amzn.to/4c1kmUs" target="_blank" rel="nofollow">Shop DVD</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 334 agrees</span><span class="meta-item">👁 2.5k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- MOVIES IN THEATERS -->
+  <div class="list-card" data-cat="culture">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Culture — Movies Now</p><h3 class="card-title">Top 5 Movies in Theaters Right Now</h3></div>
+      <span class="trophy-icon">🎬</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Spider-Man Brand New Day</p>
+          <p class="item-desc-compact">Tom Holland back where he belongs. Most anticipated Spider-Man since No Way Home. Worth every dollar.</p>
+          <a class="shop-btn" href="https://amzn.to/3SpEARc" target="_blank" rel="nofollow">Pre-Order 4K</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">The Odyssey — Christopher Nolan</p>
+          <p class="item-desc-compact">Most ambitious film of 2026. Nolan directing Homer. Own the official screenplay.</p>
+          <a class="shop-btn" href="https://amzn.to/4wGoMaG" target="_blank" rel="nofollow">Shop Screenplay</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Sinners — Ryan Coogler</p>
+          <p class="item-desc-compact">Michael B. Jordan in a period horror thriller. The most original film of 2026 by far.</p>
+          <a class="shop-btn" href="https://amzn.to/4fWjBNC" target="_blank" rel="nofollow">Watch on Prime</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Masters of the Universe</p>
+          <p class="item-desc-compact">He-Man is back and they got it right. The nostalgia is earned and the film delivers.</p>
+          <a class="shop-btn" href="https://amzn.to/4quYPcJ" target="_blank" rel="nofollow">Shop 4K</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">PAW Patrol The Dino Movie</p>
+          <p class="item-desc-compact">The kids have spoken. The most reliable family franchise in theaters right now.</p>
+          <a class="shop-btn" href="https://amzn.to/4gq8FrE" target="_blank" rel="nofollow">Pre-Order</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 412 agrees</span><span class="meta-item">👁 3.1k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+  <!-- NEW MUSIC ARTISTS -->
+  <div class="list-card" data-cat="culture">
+    <div class="card-header" onclick="toggleCard(this.closest('.list-card'))">
+      <div><p class="card-category">Music — New Artists</p><h3 class="card-title">Top 5 New Artists to Know Right Now</h3></div>
+      <span class="trophy-icon">🎤</span>
+    </div>
+    <div class="ranked-list">
+      <div class="ranked-item">
+        <div class="rank-badge">1</div>
+        <div class="item-content">
+          <p class="item-name">Tyla — South Africa</p>
+          <p class="item-desc-compact">Water changed global pop music in 2024. APOP proves it was no fluke. Most exciting new artist on earth.</p>
+          <p class="item-desc-full">Tyla is from Johannesburg South Africa and her debut proved that African pop music has a global audience waiting for it. Water became a cultural phenomenon that crossed every genre and language barrier simultaneously. The follow up APOP shows she is not a one song artist — she is a generational talent who is just getting started. The most exciting new artist on earth right now and it is not close.</p>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">2</div>
+        <div class="item-content">
+          <p class="item-name">Sombr — Indie Soul</p>
+          <p class="item-desc-compact">I Barely Know Her is one of the most emotionally precise debut albums of the year.</p>
+          <a class="shop-btn" href="https://amzn.to/4xV3Ttr" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">3</div>
+        <div class="item-content">
+          <p class="item-name">Olivia Dean — UK Soul</p>
+          <p class="item-desc-compact">The Art of Loving is the most underrated R&B album of 2026. The UK keeps sending the best voices.</p>
+          <a class="shop-btn" href="https://amzn.to/46ejSa3" target="_blank" rel="nofollow">Shop LP</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">4</div>
+        <div class="item-content">
+          <p class="item-name">Lola Young — Alt Soul</p>
+          <p class="item-desc-compact">This Wasn't Meant For You Anyway hit Euphoria levels of emotional devastation. Remember this name.</p>
+          <a class="shop-btn" href="https://amzn.to/3ULlVQs" target="_blank" rel="nofollow">Shop Vinyl</a>
+        </div>
+      </div>
+      <div class="ranked-item">
+        <div class="rank-badge">5</div>
+        <div class="item-content">
+          <p class="item-name">EsDeeKid — Hip Hop</p>
+          <p class="item-desc-compact">Rebel on limited white vinyl. A collector's item from a name about to blow. Get it now.</p>
+          <a class="shop-btn" href="https://amzn.to/4xgGZNj" target="_blank" rel="nofollow">Shop Limited Vinyl</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-toggle" onclick="toggleCard(this.closest('.list-card'))">▼ Read Full Commentary</div>
+    <div class="card-footer">
+      <div class="card-meta"><span class="meta-item">🏆 223 agrees</span><span class="meta-item">👁 1.7k views</span></div>
+      <a class="view-full" href="https://x.com/TopsLists" target="_blank">View on X →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="divider" style="margin-top:8px;">
+  <div class="divider-line"></div>
+  <span class="divider-label">How Tops Works</span>
+  <div class="divider-line"></div>
+</div>
+
+<section class="how-section">
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <h4 class="how-title">Post Your Top List</h4>
+      <p class="how-desc">Rank anything — sneakers, restaurants, movies, products. Your opinion. Your list. No gatekeeping. Everyone's a Top Voice.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <h4 class="how-title">Tops Finds the Links</h4>
+      <p class="how-desc">Tops automatically matches your picks to the best available products across Amazon and our affiliate network. No affiliate account needed.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <h4 class="how-title">Earn When People Shop</h4>
+      <p class="how-desc">Every click that converts earns you a share of the commission. Real money for real recommendations from real people.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">04</div>
+      <h4 class="how-title">Build Your Authority</h4>
+      <p class="how-desc">Your profile tracks your lists, agrees, and earnings. The more you post the more you earn. Everyone is a Top Voice here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EMAIL CAPTURE — BOTTOM OF PAGE -->
+<section id="early-access" class="hero" style="padding:60px 24px 48px; border-top:1px solid var(--border); margin-top:20px;">
+  <p class="hero-eyebrow">Everyone's a Top Voice</p>
+  <h1 style="font-size:clamp(38px,7vw,64px);">POST YOUR<br>TOPS LISTS</h1>
+  <p class="hero-sub">Rank your picks on anything. <strong>Earn when people shop your recommendations.</strong><br>No ads. No gatekeeping. Real opinions. Real money.</p>
+  <form class="email-form" onsubmit="handleSubmit(event)">
+    <input type="email" id="email-input" placeholder="Enter your email for early access" required/>
+    <button type="submit" class="btn-gold">Get Early Access</button>
+  </form>
+  <p class="hero-note">Join thousands already on the list. Free forever for creators.</p>
+</section>
+
+<footer>
+  <p class="footer-logo">TOPS</p>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:10px;">Everyone's a Top Voice</p>
+  <p style="margin-top:8px;font-size:13px;">
+    <a href="https://x.com/TopsLists" target="_blank">𝕏 @TopsLists</a>
+    &nbsp;·&nbsp;
+    <a href="https://pin.it/6QCUAtBxT" target="_blank">📌 Pinterest</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:hello@tops-lists.com">hello@tops-lists.com</a>
+  </p>
+  <p style="margin-top:16px;font-size:11px;color:#4A4740;">
+    © 2026 Tops Lists LLC · All Rights Reserved<br>
+    Some links on this page are affiliate links. Tops earns a small commission when you shop through them at no extra cost to you.
+  </p>
+</footer>
+
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = "✓ You're on the list!";
+    btn.style.background = 'linear-gradient(135deg,#2A6B2A,#1A4A1A)';
+    btn.style.color = '#90EE90';
+    btn.disabled = true;
+    document.getElementById('email-input').disabled = true;
+  }
+
+  function toggleCard(card) {
+    const isExpanded = card.classList.contains('expanded');
+    card.classList.toggle('expanded', !isExpanded);
+    const toggle = card.querySelector('.card-toggle');
+    if (toggle) {
+      toggle.textContent = !isExpanded ? '▲ Collapse Commentary' : '▼ Read Full Commentary';
+    }
+    // For items without a full desc — make sure compact stays visible
+    card.querySelectorAll('.ranked-item').forEach(item => {
+      const hasFullDesc = item.querySelector('.item-desc-full');
+      const compact = item.querySelector('.item-desc-compact');
+      if (!hasFullDesc && compact) {
+        compact.style.display = 'block';
+      }
+    });
+  }
+
+  function filterCat(cat, btn) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.list-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    document.querySelectorAll('.lists-grid').forEach(grid => {
+      const visible = Array.from(grid.querySelectorAll('.list-card')).some(c => c.style.display !== 'none');
+      grid.style.display = visible ? '' : 'none';
+    });
+
+    document.querySelectorAll('.cat-section-label').forEach(label => {
+      if (cat === 'all' || label.dataset.cat === cat) {
+        label.style.display = '';
+      } else {
+        label.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
